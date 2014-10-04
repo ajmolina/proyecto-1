@@ -16,7 +16,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         android:text="@string/materias"
-        android:onClick="verVistaAsignaturas" />
+        android:onClick="verVistaAsignaturas"
+        android:background="@color/purple01"
+        android:textColor="#ffffff" />
 
     <Button
         android:id="@+id/btnPromedio"
@@ -25,6 +27,8 @@
         android:layout_gravity="center"
         android:layout_marginTop="30dp"
         android:text="@string/promedio"
-        android:onClick="verVistaPromedio" />
+        android:onClick="verVistaPromedio"
+        android:background="@color/purple01"
+        android:textColor="#ffffff" />
 
 </LinearLayout>

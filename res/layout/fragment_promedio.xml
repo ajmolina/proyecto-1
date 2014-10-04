@@ -186,7 +186,9 @@
             android:layout_height="wrap_content"
             android:text="@string/calcular"
             android:onClick="calcularPromedioAcumulado"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/green01"
+        	android:textColor="#ffffff" />
 
     </TableRow>
 

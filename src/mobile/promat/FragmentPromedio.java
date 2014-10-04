@@ -136,6 +136,10 @@ public class FragmentPromedio extends Fragment{
             	TextView txtCreditosCursados = (TextView) getActivity().findViewById(R.id.txtValorCreditosCursados);
             	TextView txtPromedioAcumulado = (TextView) getActivity().findViewById(R.id.txtValorPromedioAcumulado);
             	
+            	if (editPromedioDeseado.getText().toString().trim().length()!=0){
+            		
+            	
+            	
             	SQLiteDatabase database = getActivity().openOrCreateDatabase("HistorialNotas", Context.MODE_PRIVATE, null);
 
         		Cursor c = database.rawQuery("SELECT SUM(creditos*5) " +
@@ -300,8 +304,7 @@ public class FragmentPromedio extends Fragment{
         		}
         			
         			
-        				
-        			
+        
    
             	/*
                 String allValues="";
@@ -314,7 +317,13 @@ public class FragmentPromedio extends Fragment{
                 allValues = allValues.substring(0,allValues.length()-1);
                 Toast.makeText(getActivity(),allValues,Toast.LENGTH_LONG).show();
         	 	*/
-            }
+        		
+        		
+            	}else{
+            		Toast.makeText(getActivity(),"Por favor, ingrese el promedio semestral deseado antes de continuar.",Toast.LENGTH_LONG).show();
+            	}
+        		
+            } //Fin onClick()
         });
 		
 		

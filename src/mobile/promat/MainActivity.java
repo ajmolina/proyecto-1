@@ -23,7 +23,8 @@ import android.widget.Toast;
 public class MainActivity extends Activity {
 	
 	int creditosCursados;
-	double promedioAcumulado;
+	double promedioAcumulado; //Semestral
+	double promedioDeseado = -1.0; //Semestral (-1.0 = asumido como valor inexistente)
 	
 	public static final String TAG_FRAGMENT = "TAG_FRAGMENT";
 	SQLiteDatabase database;
@@ -134,7 +135,7 @@ public class MainActivity extends Activity {
 	
 	public void verVistaNotas(View v){
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		ft.replace(R.id.container, new FragmentNotas()).addToBackStack(TAG_FRAGMENT);
+		ft.replace(R.id.container, new FragmentNotas(creditosCursados, promedioAcumulado, promedioDeseado)).addToBackStack(TAG_FRAGMENT);
 		ft.commit();
 	}
 	
@@ -332,8 +333,6 @@ public class MainActivity extends Activity {
 		EditText editNotas4 = (EditText) findViewById(R.id.editNotas4);
 		
 		if (editNotaDeseada.getText().toString().trim().length()!=0){
-			
-		
 		
 			database = openOrCreateDatabase("HistorialNotas", Context.MODE_PRIVATE, null);
 			String nombreAsignatura = spinnerAsignaturas.getSelectedItem().toString();
@@ -514,33 +513,62 @@ public class MainActivity extends Activity {
     	TextView txtResultado16 = (TextView) findViewById(R.id.txtResult16);
     	TextView txtResultado17 = (TextView) findViewById(R.id.txtResult17);
     	TextView txtResultado18 = (TextView) findViewById(R.id.txtResult18);
+    	
+    	if (editPromedioDeseado.getText().toString().trim().length()!=0){
+    	
 		
-		for (int creditosSemestreActual=12; 
-				creditosSemestreActual<=18;
-				creditosSemestreActual++){
-			double promedioRequeridoSemestreActual = (
-					(Double.parseDouble(editPromedioDeseado.getText().toString()) * 
-					(Integer.parseInt(txtCreditosCursados.getText().toString()) +
-							creditosSemestreActual)) - 
-					(Double.parseDouble(txtPromedioAcumulado.getText().toString()) *
-					Integer.parseInt(txtCreditosCursados.getText().toString())))
-					/ creditosSemestreActual;
-			
-			switch(creditosSemestreActual){
-			case 12:txtResultado12.setText(""+promedioRequeridoSemestreActual); break;
-			case 13:txtResultado13.setText(""+promedioRequeridoSemestreActual); break;
-			case 14:txtResultado14.setText(""+promedioRequeridoSemestreActual); break;
-			case 15:txtResultado15.setText(""+promedioRequeridoSemestreActual); break;
-			case 16:txtResultado16.setText(""+promedioRequeridoSemestreActual); break;
-			case 17:txtResultado17.setText(""+promedioRequeridoSemestreActual); break;
-			case 18:txtResultado18.setText(""+promedioRequeridoSemestreActual); break;
+			for (int creditosSemestreActual=12; 
+					creditosSemestreActual<=18;
+					creditosSemestreActual++){
+				
+				double promedioRequeridoSemestreActual = promedioRequeridoSemestreActual(
+						Integer.parseInt(txtCreditosCursados.getText().toString()),
+						creditosSemestreActual,
+						Double.parseDouble(txtPromedioAcumulado.getText().toString()),
+						Double.parseDouble(editPromedioDeseado.getText().toString()));
+				
+				switch(creditosSemestreActual){
+				case 12:txtResultado12.setText(""+promedioRequeridoSemestreActual); break;
+				case 13:txtResultado13.setText(""+promedioRequeridoSemestreActual); break;
+				case 14:txtResultado14.setText(""+promedioRequeridoSemestreActual); break;
+				case 15:txtResultado15.setText(""+promedioRequeridoSemestreActual); break;
+				case 16:txtResultado16.setText(""+promedioRequeridoSemestreActual); break;
+				case 17:txtResultado17.setText(""+promedioRequeridoSemestreActual); break;
+				case 18:txtResultado18.setText(""+promedioRequeridoSemestreActual); break;
+				}			
 			}
-
 			
-		}
-
+			this.promedioDeseado = Double.parseDouble(editPromedioDeseado.getText().toString());
+		
+    	}else{
+			Toast.makeText(this, 
+					"Por favor, ingrese el promedio semestral deseado antes de continuar.",
+					Toast.LENGTH_SHORT).show();   		
+    		
+    	} //Fin de la validación
 
 	}
+	
+	static double promedioRequeridoSemestreActual(int creditosCursados, 
+												int creditosActuales,
+												double promedioAcumulado, 
+												double promedioDeseado){
+		return ((promedioDeseado * (creditosCursados + creditosActuales)) 
+				- (promedioAcumulado * creditosCursados)) 
+				/ creditosActuales;
+		
+		/*
+		double promedioRequeridoSemestreActual = (
+				(Double.parseDouble(editPromedioDeseado.getText().toString()) * 
+				(Integer.parseInt(txtCreditosCursados.getText().toString()) +
+						creditosSemestreActual)) - 
+				(Double.parseDouble(txtPromedioAcumulado.getText().toString()) *
+				Integer.parseInt(txtCreditosCursados.getText().toString())))
+				/ creditosSemestreActual;
+		*/
+	}
+	
+	
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */

@@ -32,6 +32,18 @@ public class FragmentNotas extends Fragment{
 	private ArrayList<String> nombreAsignaturas;
 	SQLiteDatabase database;
 	
+	int creditosCursados;
+	double promedioAcumulado; //Semestral
+	double promedioDeseado = -1.0; //Semestral (-1.0 = asumido como valor inexistente)
+	
+	public FragmentNotas(int creditosCursados, double promedioAcumulado,
+			double promedioDeseado) {
+		super();
+		this.creditosCursados = creditosCursados;
+		this.promedioAcumulado = promedioAcumulado;
+		this.promedioDeseado = promedioDeseado;
+	}
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -55,6 +67,60 @@ public class FragmentNotas extends Fragment{
 		spinnerAsignaturas.setAdapter(dataAdapter);
 		addListenerOnSpinnerItemSelection();
 		return view;
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		EditText notaDeseada = (EditText) getActivity().findViewById(R.id.editNotaDeseada);
+		
+		int creditosActuales=0;
+		double d = 0;
+		
+		//NOTA: Debe haber al menos una materia ingresada en el sistema para esta operación. De lo contrario, el resultado de
+		//la nota deseada es "infinito" (División por 0 es realísticamente difícil de hacer; Créditos actuales=0).
+		//Además, se debió haber pedido la nota de promedio deseado con anterioridad.
+		
+		
+			
+		
+		
+		//Calcular el número de créditos totales en las materias a través de la base de datos
+    	SQLiteDatabase database = getActivity().openOrCreateDatabase("HistorialNotas", Context.MODE_PRIVATE, null);
+
+		Cursor c = database.rawQuery("SELECT SUM(creditos) " +
+				"FROM materias; ", null);
+		
+		if (c.moveToFirst()){
+			if (!c.isNull(0)){
+				
+				if (promedioDeseado != -1){
+					
+					creditosActuales = Integer.parseInt(c.getString(0));
+					//Aplicar el algoritmo para calcular la nota deseada
+					d = MainActivity.promedioRequeridoSemestreActual(creditosCursados, creditosActuales, promedioAcumulado, promedioDeseado);
+					//Sugerir la nota deseada en pantalla
+					notaDeseada.setText(""+d);				
+					Toast.makeText(getActivity(), 
+			                "Recuerde que se debe al menos especificar los porcentajes de las notas antes de " +
+			                "calcular lo requerido para obtener una nota deseada.",
+			                Toast.LENGTH_LONG).show();
+				}
+				
+			}else{
+				Toast.makeText(getActivity(), 
+		                "Aún no existen materias en el sistema. Recuerde que las materias se pueden" +
+		                " agregarse en la sección anterior.",
+		                Toast.LENGTH_LONG).show();
+			}
+		}
+		
+		c.close();
+		database.close();
+		
+		
+		
+		
 	}
 	
 	public void addListenerOnSpinnerItemSelection()

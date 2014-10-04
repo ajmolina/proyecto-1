@@ -132,7 +132,9 @@
 	        android:layout_height="wrap_content"
 	        android:onClick="ingresarAsignatura"
 	        android:text="@string/ingresar"
-	        android:layout_weight="1" />
+	        android:layout_weight="1"
+	        android:background="@color/blue01"
+        	android:textColor="#ffffff" />
 		
     </TableRow>
 
@@ -155,7 +157,9 @@
             android:layout_height="wrap_content"
             android:onClick="verVistaNotas"
             android:text="@string/gestionar_notas"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:background="@color/orange01"
+        	android:textColor="#ffffff" />
 
     </TableRow>
 

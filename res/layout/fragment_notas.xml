@@ -177,7 +177,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="calcularNotas"
-                android:text="@string/calcular" />
+                android:text="@string/calcular"
+                android:background="@color/green01"
+       			android:textColor="#ffffff" />
 
             <Button
                 android:id="@+id/btnIngresarNotas"
@@ -186,7 +188,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:onClick="ingresarNotas"
-                android:text="@string/ingresar" />
+                android:text="@string/ingresar"
+                android:background="@color/blue01"
+        		android:textColor="#ffffff" />
 
         </TableRow>
 
